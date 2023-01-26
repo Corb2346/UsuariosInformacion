@@ -6,7 +6,7 @@ const desarrolloAsíncrono = (delay) => {
     setTimeout(() => {
         console.log(`Asíncrono - Cargando Data: Tiempo de espera aproximado ${delay} miliegundos`)
         getUsers(1);
-
+       
     }
         , delay); 
 }
@@ -24,14 +24,14 @@ const displayInfoFromLocalStorage = () => {
         document.getElementById("rowMainContainer").appendChild(divMainCol)
 
         const divCol = document.createElement("div");
-        divCol.classList.add("card");
+        divCol.classList.add("card","align-items-center");
         divCol.style.width = "18rem";
         divCol.id = `divCol${counter}`
         document.getElementById(`divMainCol${counter}`).appendChild(divCol)
         console.log("niño implantado");
 
         const imgDiv = document.createElement("img");
-        imgDiv.classList.add("card-img-top");
+        imgDiv.classList.add("card-img-top","rounded-circle");
         imgDiv.src = `${user.avatar}`;
         document.getElementById(`divCol${counter}`).appendChild(imgDiv)
 
@@ -73,7 +73,7 @@ const getUsers = (page = 1) => {
             console.log(data);
             localStorage.setItem("usersData",JSON.stringify(data));
             localStorage.setItem("fechaCaducidad", (new Date().getTime()) + 60_000 );
-            
+            document.getElementById("loader").style.display = "none";
             displayInfoFromLocalStorage();
         })
         .catch(error => console.log(error));
@@ -86,8 +86,12 @@ btnDisplayList.addEventListener("click", () => {
 let fechaActual = new Date().getTime() 
 console.log(fechaActual);
     fechaCaducidad = localStorage.getItem('fechaCaducidad');
-    if(fechaCaducidad == null || fechaActual > fechaCaducidad)
-     desarrolloAsíncrono(4000); 
+    if(fechaCaducidad == null || fechaActual > fechaCaducidad){
+        document.getElementById("greyBackground").style.display = "inline";
+        document.getElementById("loader").style.display = "flex";
+        desarrolloAsíncrono(4000); 
+    }
+
     else {
 
         displayInfoFromLocalStorage();
